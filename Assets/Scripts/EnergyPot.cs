@@ -18,9 +18,4 @@ public class EnergyPot : Item
         player.health.ChangeHealth((int)itemData.itemPotency, 1);
         base.OnActive(player);
     }
-
-    public override void OnDeactivate(PlayerController player)
-    {
-        base.OnDeactivate(player);
-    }
 }

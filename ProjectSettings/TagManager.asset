@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Item
   - Enemy
+  - Bullet
   layers:
   - Default
   - TransparentFX
@@ -54,4 +55,7 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 1446534055
+    locked: 0
+  - name: Item
+    uniqueID: 1152596155
     locked: 0

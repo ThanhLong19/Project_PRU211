@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
         health.Setup(10);
         StartCoroutine(AutoShoot());
         rb = GetComponent<Rigidbody2D>();
+        _listItems = new List<Item>();
+        _listItemsTimer = new List<float>();
     }
 
     IEnumerator AutoShoot()
@@ -34,6 +36,7 @@ public class PlayerController : MonoBehaviour
                 Shoot();
                 yield return new WaitForSeconds(fireRate);
             }
+
             yield return null;
         }
     }
@@ -51,15 +54,20 @@ public class PlayerController : MonoBehaviour
         if (other.transform.CompareTag("Item"))
         {
             var item = other.GetComponent<Item>();
+            Debug.Log(item.itemData.itemID);
             switch (item.itemData.itemDuration)
             {
                 case < 0f:
                     item.OnActive(this);
                     break;
-                case > 0f when _listItems.Any(i => i.itemData.itemID == item.itemData.itemID):
-                    _listItems.Add(item);
-                    _listItemsTimer.Add(item.itemData.itemDuration);
-                    item.OnActive(this);
+                case > 0f:
+                    if (_listItems.FirstOrDefault(i => i.itemData.itemID == item.itemData.itemID) == null)
+                    {
+                        _listItems.Add(item);
+                        _listItemsTimer.Add(item.itemData.itemDuration);
+                        item.OnActive(this);
+                    }
+
                     break;
             }
         }
