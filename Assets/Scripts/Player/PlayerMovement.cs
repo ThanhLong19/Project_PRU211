@@ -22,12 +22,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void PlayerMove()
     {
-        //float moveHorizontal = Input.GetAxis("Horizontal");
-        //float moveVertical = Input.GetAxis("Vertical");
-
-        //Vector2 movement = new Vector2(moveHorizontal, moveVertical);
-        //rb.velocity = movement * moveSpeed;
-
         float moveHorizontal = joystick.GetJoystickPosition().x;
         float moveVertical = joystick.GetJoystickPosition().y;
 
