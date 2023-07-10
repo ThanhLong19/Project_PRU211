@@ -15,6 +15,7 @@ public class GameController : MonoBehaviour
 {
     [SerializeField] private float multiplierAmount;
     public static GameController Instance { get; private set; }
+    public PlayerController player;
     private int _enemiesCount;
     [HideInInspector] public float speedMultiplier;
     public GameState gameState;
@@ -34,11 +35,13 @@ public class GameController : MonoBehaviour
     private void OnEnable()
     {
         Enemy.OnEnemyDefeated += AddScoreWhenEnemyDefeat;
+        player.health.OnDeath += StopGame;
     }
 
     private void OnDisable()
     {
         Enemy.OnEnemyDefeated -= AddScoreWhenEnemyDefeat;
+        player.health.OnDeath -= StopGame;
     }
 
     [HideInInspector] public float pointMultiplier;
@@ -73,5 +76,11 @@ public class GameController : MonoBehaviour
         if (_enemiesCount % 5 != 0) return;
         speedMultiplier *= multiplierAmount;
         OnChangeSpawnTimer?.Invoke(multiplierAmount);
+    }
+
+    private void StopGame()
+    {
+        gameState = GameState.Ending;
+        Time.timeScale = 0f;
     }
 }

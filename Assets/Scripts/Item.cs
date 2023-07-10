@@ -8,7 +8,6 @@ public class Item : MonoBehaviour
     [SerializeField] public ItemScriptableObject itemData;
 
     private float _timer;
-    private bool _isActivateInsidePlayer;
 
     private void OnEnable()
     {
@@ -16,7 +15,6 @@ public class Item : MonoBehaviour
 
     private void Start()
     {
-        _isActivateInsidePlayer = false;
         transform.DOMoveY(-10f, GameController.Instance.speedMultiplier).SetSpeedBased(true).SetEase(Ease.Linear)
             .OnComplete(
                 () => { Destroy(gameObject); });
@@ -24,7 +22,8 @@ public class Item : MonoBehaviour
 
     public virtual void OnTriggerEnter2D(Collider2D other)
     {
-        Destroy(gameObject);
+        transform.DOKill();
+        gameObject.SetActive(false);
     }
 
     public virtual void OnActive([CanBeNull] PlayerController player)
@@ -33,6 +32,7 @@ public class Item : MonoBehaviour
 
     public virtual void OnDeactivate([CanBeNull] PlayerController player)
     {
+        Destroy(gameObject);
     }
 
     private void OnDisable()
@@ -41,8 +41,5 @@ public class Item : MonoBehaviour
 
     private void Update()
     {
-        if (_isActivateInsidePlayer)
-        {
-        }
     }
 }
