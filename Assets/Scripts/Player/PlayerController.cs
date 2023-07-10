@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,7 +9,9 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab;
     public float bulletSpeed = 10f;
     public float fireRate = 0.1f;
-
+public Health health;
+    private List<Item> _listItems;
+    private List<float> _listItemsTimer;
     private bool canShoot = true;
     private Rigidbody2D rb;
 
@@ -15,6 +19,8 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        health = GetComponent<Health>();
+        health.Setup(10);
         StartCoroutine(AutoShoot());
         rb = GetComponent<Rigidbody2D>();
     }
@@ -35,25 +41,40 @@ public class PlayerController : MonoBehaviour
     private void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        rb = bullet.GetComponent<Rigidbody2D>();
+        bullet.GetComponent<BulletController>().damage = 1;
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = transform.up * bulletSpeed;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (other.transform.CompareTag("Item"))
         {
-            //collisionCount++;
-            //if(collisionCount >= 3)
-            //{
-                PlayerDie();
-            //}
+            var item = other.GetComponent<Item>();
+            switch (item.itemData.itemDuration)
+            {
+                case < 0f:
+                    item.OnActive(this);
+                    break;
+                case > 0f when _listItems.Any(i => i.itemData.itemID == item.itemData.itemID):
+                    _listItems.Add(item);
+                    _listItemsTimer.Add(item.itemData.itemDuration);
+                    item.OnActive(this);
+                    break;
+            }
         }
     }
 
-    private void PlayerDie()
+    private void OnCheckItemsList()
     {
-        Debug.Log("Player collided with enemy");
-    }
+        for (var index = 0; index < _listItemsTimer.Count; index++)
+        {
+            var itemDuration = _listItemsTimer[index];
+            if (!(itemDuration < 0f)) continue;
+            _listItems[index].OnDeactivate(this);
+            _listItems.RemoveAt(index);
+        }
 
+        _listItemsTimer.RemoveAll(o => o < 0f);
+    }
 }
