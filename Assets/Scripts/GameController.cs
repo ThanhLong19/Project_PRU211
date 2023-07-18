@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour
     [HideInInspector] public float speedMultiplier;
     public GameState gameState;
     private int _points;
+    private int _highScore;
     public event Action<float> OnChangeSpawnTimer;
 
     private int Points
@@ -30,7 +31,31 @@ public class GameController : MonoBehaviour
         {
             _points = value;
             OnScoreChanged?.Invoke(_points);
+            // Kiểm tra nếu điểm mới vượt qua điểm cao nhất, cập nhật điểm cao nhất
+            if (_points > _highScore)
+            {
+                _highScore = _points;
+                OnHighScoreChanged?.Invoke(_highScore);
+            }
         }
+    }
+    public static event Action<int> OnHighScoreChanged;
+    public int GetScore()
+    {
+        return _points;
+    }
+    public int GetHighScore()
+    {
+        return _highScore;
+    }
+    public void SaveHighScore()
+    {
+        PlayerPrefs.SetInt("HighScore", _highScore);
+    }
+    public void LoadHighScore()
+    {
+        _highScore = PlayerPrefs.GetInt("HighScore", 0);
+        OnHighScoreChanged?.Invoke(_highScore);
     }
 
     private void OnEnable()
@@ -85,6 +110,9 @@ public class GameController : MonoBehaviour
     {
         gameState = GameState.Ending;
         Time.timeScale = 0f;
+        //_highScore = 0;
+        //OnHighScoreChanged?.Invoke(_highScore);
+        //SaveHighScore();
         SceneManager.LoadScene(1);
     }
 }
