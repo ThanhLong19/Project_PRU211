@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 public enum GameState
@@ -36,12 +37,14 @@ public class GameController : MonoBehaviour
     {
         Enemy.OnEnemyDefeated += AddScoreWhenEnemyDefeat;
         player.health.OnDeath += StopGame;
+        
     }
 
     private void OnDisable()
     {
         Enemy.OnEnemyDefeated -= AddScoreWhenEnemyDefeat;
         player.health.OnDeath -= StopGame;
+
     }
 
     [HideInInspector] public float pointMultiplier;
@@ -82,5 +85,6 @@ public class GameController : MonoBehaviour
     {
         gameState = GameState.Ending;
         Time.timeScale = 0f;
+        SceneManager.LoadScene(1);
     }
 }
