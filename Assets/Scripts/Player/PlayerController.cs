@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab;
     public float bulletSpeed = 10f;
     public float fireRate = 0.1f;
-    public Health health;
+public Health health;
     private List<Item> _listItems;
     private List<float> _listItemsTimer;
     private bool canShoot = true;
@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         health = GetComponent<Health>();
-        health.Setup(2);
+        health.Setup(10);
         StartCoroutine(AutoShoot());
         rb = GetComponent<Rigidbody2D>();
         _listItems = new List<Item>();
