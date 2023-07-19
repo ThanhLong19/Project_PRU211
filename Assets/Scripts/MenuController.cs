@@ -15,6 +15,7 @@ public class MenuController : MonoBehaviour
 
     private void ClickAction()
     {
+        Debug.Log("Menu Cliked");
         SceneManager.LoadScene(0);
     }
 
