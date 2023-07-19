@@ -36,6 +36,7 @@ public class Enemy : MonoBehaviour
 
     private void OnDisable()
     {
+        transform.DOKill();
         health.OnDeath -= ReleaseWhenDied;
     }
 
@@ -52,7 +53,6 @@ public class Enemy : MonoBehaviour
 
     private void ReleaseWhenDied()
     {
-        transform.DOKill();
         var chanceToDrop = UnityEngine.Random.Range(0f, 1f);
         Item itemToSelect = null;
         var lastItemDropChance = 0f;
