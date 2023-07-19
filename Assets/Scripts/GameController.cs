@@ -69,7 +69,7 @@ public class GameController : MonoBehaviour
     {
         Enemy.OnEnemyDefeated -= AddScoreWhenEnemyDefeat;
         player.health.OnDeath -= StopGame;
-
+        
     }
 
     [HideInInspector] public float pointMultiplier;
