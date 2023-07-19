@@ -1,28 +1,31 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class NewGameButton : MonoBehaviour
+public class QuitController : MonoBehaviour
 {
-    public Button button;
     // Start is called before the first frame update
-    void Start()
+
+    public Button quitButton;
+
+
+
+    private void ClickActionQuit()
     {
-        button.onClick.AddListener(ClickAction);
+        Application.Quit();
     }
 
-    private void ClickAction()
+
+    void Start()
     {
-        SceneManager.LoadScene(1);
+        quitButton.onClick.AddListener(ClickActionQuit);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
