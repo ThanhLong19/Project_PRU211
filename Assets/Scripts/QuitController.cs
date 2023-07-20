@@ -14,12 +14,14 @@ public class QuitController : MonoBehaviour
 
     private void ClickActionQuit()
     {
+
         Application.Quit();
     }
 
 
     void Start()
     {
+        
         quitButton.onClick.AddListener(ClickActionQuit);
     }
 
