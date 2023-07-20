@@ -1,6 +1,9 @@
-﻿using System;
+﻿using DG.Tweening.Core.Easing;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -22,7 +25,9 @@ public class GameController : MonoBehaviour
     public GameState gameState;
     private int _points;
     private int _highScore;
+    private string pathFileHighScore = @"../highscore.txt";
     public event Action<float> OnChangeSpawnTimer;
+    public int HighScore { get; set; } = 0;
 
     private int Points
     {
@@ -50,12 +55,79 @@ public class GameController : MonoBehaviour
     }
     public void SaveHighScore()
     {
+        var highScores = new List<int>();
+        var rsHighScore = ReadFromFile(pathFileHighScore);
+        if (string.IsNullOrEmpty(rsHighScore))
+        {
+            WriteToFile(_highScore.ToString(), pathFileHighScore);
+        }
+        else
+        {
+            var arrEnemy = rsHighScore.Trim().Split("\n");
+            foreach (var item in arrEnemy)
+            {
+                highScores.Add(int.Parse(item));
+            }
+            highScores.Add(_highScore);
+            highScores = highScores.OrderByDescending(x => x).ToList();
+            WriteToFile(string.Join("\n", highScores), pathFileHighScore);
+        }
         PlayerPrefs.SetInt("HighScore", _highScore);
     }
     public void LoadHighScore()
     {
+        var highScores = new List<int>();
+        var rsHighScore = ReadFromFile(pathFileHighScore);
+        if (string.IsNullOrEmpty(rsHighScore))
+        {
+            HighScore = _highScore;
+        }
+        else
+        {
+            var arrEnemy = rsHighScore.Trim().Split("\n");
+            foreach (var item in arrEnemy)
+            {
+                highScores.Add(int.Parse(item));
+            }
+            highScores.Add(_highScore);
+            highScores = highScores.OrderByDescending(x => x).ToList();
+            HighScore = highScores.First();
+        }
+         
         _highScore = PlayerPrefs.GetInt("HighScore", 0);
         OnHighScoreChanged?.Invoke(_highScore);
+    }
+    public void WriteToFile(string content, string path)
+    {
+        try
+        {
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                writer.WriteLine(content);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex.Message);
+        }
+
+    }
+    public string ReadFromFile(string path)
+    {
+        string rs = string.Empty;
+        try
+        {
+            rs = string.Empty;
+            if (File.Exists(path))
+            {
+                rs = File.ReadAllText(path);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.Log(ex.Message);
+        }
+        return rs;
     }
 
     private void OnEnable()
@@ -108,6 +180,8 @@ public class GameController : MonoBehaviour
 
     private void StopGame()
     {
+        SaveHighScore();
+        LoadHighScore();
         gameState = GameState.Ending;
         Time.timeScale = 0f;
         //_highScore = 0;

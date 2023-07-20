@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         health = GetComponent<Health>();
-        health.Setup(2);
+        health.Setup(10);
         StartCoroutine(AutoShoot());
         rb = GetComponent<Rigidbody2D>();
         _listItems = new List<Item>();

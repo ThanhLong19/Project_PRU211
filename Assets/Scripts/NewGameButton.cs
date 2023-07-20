@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Timeline.Actions;
@@ -18,8 +18,8 @@ public class NewGameButton : MonoBehaviour
 
         int currentScore = GameController.Instance.GetScore();
         pointText.text = "Score: " + currentScore.ToString();
-
-        int highScore = GameController.Instance.GetHighScore();
+        //GameController.Instance.LoadHighScore();
+        int highScore = GameController.Instance.HighScore;
         highScoreText.text = "High Score: " + highScore.ToString();
 
     }
