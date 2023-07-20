@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab;
     public float bulletSpeed = 10f;
     public float fireRate = 0.1f;
-    public Health health;
+public Health health;
     private List<Item> _listItems;
     private List<float> _listItemsTimer;
     private bool canShoot = true;

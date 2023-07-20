@@ -141,7 +141,7 @@ public class GameController : MonoBehaviour
     {
         Enemy.OnEnemyDefeated -= AddScoreWhenEnemyDefeat;
         player.health.OnDeath -= StopGame;
-
+        
     }
 
     [HideInInspector] public float pointMultiplier;
@@ -162,8 +162,8 @@ public class GameController : MonoBehaviour
         {
             Destroy(this);
         }
-
-        speedMultiplier = 1f;
+		Time.timeScale = 1f;
+		speedMultiplier = 1f;
         _enemiesCount = 0;
         gameState = GameState.Playing;
         pointMultiplier = 1f;
@@ -187,6 +187,6 @@ public class GameController : MonoBehaviour
         //_highScore = 0;
         //OnHighScoreChanged?.Invoke(_highScore);
         //SaveHighScore();
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
     }
 }

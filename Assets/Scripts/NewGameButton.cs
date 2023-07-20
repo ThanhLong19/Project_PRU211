@@ -15,18 +15,15 @@ public class NewGameButton : MonoBehaviour
     void Start()
     {
         button.onClick.AddListener(ClickAction);
-
         int currentScore = GameController.Instance.GetScore();
         pointText.text = "Score: " + currentScore.ToString();
-        //GameController.Instance.LoadHighScore();
-        int highScore = GameController.Instance.HighScore;
+        int highScore = GameController.Instance.GetHighScore();
         highScoreText.text = "High Score: " + highScore.ToString();
-
     }
 
     private void ClickAction()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(1);
     }
 
     // Update is called once per frame
