@@ -27,17 +27,14 @@ public class NewGameButton : MonoBehaviour
 
     private void ClickNewGameAction()
     {
-        Debug.Log("NewGame Cliked");
         SceneManager.LoadScene(1);
     }
     private void ClickMenuAction()
     {
-        Debug.Log("Menu Cliked");
         SceneManager.LoadScene(0);
     }
     private void ClickQuitAction()
     {
-        Debug.Log("Quit Cliked");
         Application.Quit();
     }
 
