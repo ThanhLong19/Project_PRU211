@@ -93,10 +93,16 @@ public class GameController : MonoBehaviour
             highScores = highScores.OrderByDescending(x => x).ToList();
             HighScore = highScores.First();
         }
-         
-        _highScore = PlayerPrefs.GetInt("HighScore", 0);
+
+        // Set _highScore based on the loaded or default value
+        _highScore = HighScore;
+
+        // Trigger the OnHighScoreChanged event with the updated _highScore value
         OnHighScoreChanged?.Invoke(_highScore);
+        // Also, save the updated _highScore to PlayerPrefs
+        PlayerPrefs.SetInt("HighScore", _highScore);
     }
+
     public void WriteToFile(string content, string path)
     {
         try
