@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab;
     public float bulletSpeed = 10f;
     public float fireRate = 0.1f;
-public Health health;
+    public Health health;
     private List<Item> _listItems;
     private List<float> _listItemsTimer;
     private bool canShoot = true;
@@ -54,18 +54,22 @@ public Health health;
         if (other.transform.CompareTag("Item"))
         {
             var item = other.GetComponent<Item>();
-            Debug.Log(item.itemData.itemID);
             switch (item.itemData.itemDuration)
             {
                 case < 0f:
                     item.OnActive(this);
                     break;
                 case > 0f:
-                    if (_listItems.FirstOrDefault(i => i.itemData.itemID == item.itemData.itemID) == null)
+                    var itemInList = _listItems.FirstOrDefault(i => i.itemData.itemID == item.itemData.itemID);
+                    if (itemInList == null)
                     {
                         _listItems.Add(item);
                         _listItemsTimer.Add(item.itemData.itemDuration);
                         item.OnActive(this);
+                    }
+                    else
+                    {
+                        _listItemsTimer[_listItems.IndexOf(itemInList)] = item.itemData.itemDuration;
                     }
 
                     break;
@@ -84,5 +88,15 @@ public Health health;
         }
 
         _listItemsTimer.RemoveAll(o => o < 0f);
+    }
+
+    private void Update()
+    {
+        for (var i = 0; i < _listItemsTimer.Count; i++)
+        {
+            _listItemsTimer[i] -= Time.deltaTime;
+        }
+
+        OnCheckItemsList();
     }
 }
